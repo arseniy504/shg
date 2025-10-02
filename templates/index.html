@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlobalShodan - Free Internet Device Search</title>
+    <meta name="description" content="Free Shodan alternative - Search internet-connected devices worldwide with real-time scanning">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="/" class="logo-link">
+                    <h1>🌍 GlobalShodan</h1>
+                </a>
+            </div>
+            <div class="nav-menu">
+                <a href="/search" class="nav-link">Search</a>
+                <a href="/map" class="nav-link">World Map</a>
+                <a href="/stats" class="nav-link">Statistics</a>
+                <a href="/api" class="nav-link">API</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section class="hero-section">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1 class="hero-title">Search Every Device Connected to Internet</h1>
+                    <p class="hero-subtitle">Free Shodan alternative - Real device scanning with vulnerability detection</p>
+                    
+                    <div class="search-container-large">
+                        <div class="search-box">
+                            <input type="text" id="mainSearch" placeholder="Search: webcam, router, CVE-2021-41773, 8.8.8.8...">
+                            <button id="searchButton">
+                                <span>🔍 Search Devices</span>
+                            </button>
+                        </div>
+                        <div class="search-filters">
+                            <select id="countryFilter">
+                                <option value="">All Countries</option>
+                                <option value="US">United States</option>
+                                <option value="UA">Ukraine</option>
+                                <option value="DE">Germany</option>
+                                <option value="FR">France</option>
+                                <option value="CN">China</option>
+                            </select>
+                            <select id="deviceTypeFilter">
+                                <option value="">All Devices</option>
+                                <option value="web_server">Web Servers</option>
+                                <option value="network_device">Network Devices</option>
+                                <option value="camera">Cameras</option>
+                                <option value="dns_server">DNS Servers</option>
+                                <option value="database">Databases</option>
+                            </select>
+                            <select id="riskFilter">
+                                <option value="">All Risks</option>
+                                <option value="critical">Critical</option>
+                                <option value="high">High</option>
+                                <option value="medium">Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="quick-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" id="totalDevices">0</span>
+                            <span class="stat-label">Devices Found</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="vulnerableDevices">0</span>
+                            <span class="stat-label">Vulnerable Devices</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="countries">0</span>
+                            <span class="stat-label">Countries</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="deviceTypes">0</span>
+                            <span class="stat-label">Device Types</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features-section">
+            <div class="container">
+                <h2 class="section-title">Powerful Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🔍</div>
+                        <h3>Real Device Scanning</h3>
+                        <p>Actual internet scanning using nmap and masscan technology</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚠️</div>
+                        <h3>Vulnerability Detection</h3>
+                        <p>Automated CVE scanning and security risk assessment</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🌐</div>
+                        <h3>Global Coverage</h3>
+                        <p>Devices from all over the world with geolocation data</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Live Statistics</h3>
+                        <p>Real-time analytics and device distribution maps</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔧</div>
+                        <h3>REST API</h3>
+                        <p>Full API access for developers and researchers</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🆓</div>
+                        <h3>Completely Free</h3>
+                        <p>No limits, no payments - open for everyone</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="recent-devices-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Recently Discovered Devices</h2>
+                    <button id="scanRandom" class="btn-secondary">Scan Random IPs</button>
+                </div>
+                <div id="recentDevices" class="devices-grid">
+                    <div class="loading">Loading recent devices...</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="quick-scan-section">
+            <div class="container">
+                <h2 class="section-title">Quick IP Scan</h2>
+                <div class="scan-box">
+                    <input type="text" id="ipScanInput" placeholder="Enter IP address (e.g., 8.8.8.8)">
+                    <button id="scanIpButton">Scan IP</button>
+                </div>
+                <div id="scanResults" class="scan-results"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>GlobalShodan</h3>
+                    <p>Free internet device search engine for security research and education.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <p>Use responsibly. Only scan devices you own or have permission to test.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 GlobalShodan. Free internet device search engine.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
